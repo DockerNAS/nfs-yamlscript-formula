@@ -1,0 +1,169 @@
+local:
+  idmapd_conf:
+    file:
+    - backup: ''
+    - check_cmd: null
+    - contents: null
+    - contents_grains: null
+    - contents_newline: true
+    - contents_pillar: null
+    - context: null
+    - create: true
+    - defaults: null
+    - dir_mode: null
+    - env: null
+    - follow_symlinks: true
+    - group: root
+    - makedirs: false
+    - mode: 644
+    - name: /etc/idmapd.conf
+    - replace: true
+    - show_diff: true
+    - source: salt://nfs/server/idmapd.conf
+    - source_hash: ''
+    - template: null
+    - user: root
+    - managed
+    - order: 10006
+    __sls__: nfs.server
+    __env__: base
+  nfs_server:
+    pkg:
+    - allow_updates: false
+    - fromrepo: null
+    - name: nfs-kernel-server
+    - normalize: true
+    - pkg_verify: false
+    - pkgs: null
+    - refresh: null
+    - skip_suggestions: false
+    - skip_verify: false
+    - sources: null
+    - version: null
+    - installed
+    - order: 10000
+    service:
+    - enable: null
+    - name: nfs-kernel-server
+    - require:
+      - pkg: nfs-kernel-server
+    - sig: null
+    - watch:
+      - file: server_nfs_kernel_server
+      - file: server_nfs_common
+      - file: idmapd_conf
+    - running
+    - order: 10001
+    __sls__: nfs.server
+    __env__: base
+  server_exports:
+    file:
+    - backup: ''
+    - check_cmd: null
+    - contents: This is a test
+    - contents_grains: null
+    - contents_newline: true
+    - contents_pillar: null
+    - context: null
+    - create: true
+    - defaults: null
+    - dir_mode: null
+    - env: null
+    - follow_symlinks: true
+    - group: root
+    - makedirs: false
+    - mode: 644
+    - name: /tmp/exports
+    - replace: true
+    - show_diff: true
+    - source: null
+    - source_hash: ''
+    - template: null
+    - text: null
+    - user: root
+    - managed
+    - order: 10005
+    __sls__: nfs.server
+    __env__: base
+  server_nfs_common:
+    file:
+    - backup: ''
+    - check_cmd: null
+    - contents: null
+    - contents_grains: null
+    - contents_newline: true
+    - contents_pillar: null
+    - context: null
+    - create: true
+    - defaults: null
+    - dir_mode: null
+    - env: null
+    - follow_symlinks: true
+    - group: root
+    - makedirs: false
+    - mode: 644
+    - name: /etc/default/nfs-common
+    - replace: true
+    - show_diff: true
+    - source: salt://nfs/server/nfs-common
+    - source_hash: ''
+    - template: null
+    - user: root
+    - managed
+    - order: 10004
+    __sls__: nfs.server
+    __env__: base
+  server_nfs_kernel_server:
+    file:
+    - backup: ''
+    - check_cmd: null
+    - contents: null
+    - contents_grains: null
+    - contents_newline: true
+    - contents_pillar: null
+    - context: null
+    - create: true
+    - defaults: null
+    - dir_mode: null
+    - env: null
+    - follow_symlinks: true
+    - group: root
+    - makedirs: false
+    - mode: 644
+    - name: /etc/default/nfs-kernel-server
+    - replace: true
+    - show_diff: true
+    - source: salt://nfs/server/nfs-kernel-server
+    - source_hash: ''
+    - template: null
+    - user: root
+    - managed
+    - order: 10003
+    __sls__: nfs.server
+    __env__: base
+  update_exports:
+    cmd:
+    - creates: null
+    - cwd: null
+    - env: null
+    - group: null
+    - name: exportfs -ra
+    - onlyif: null
+    - output_loglevel: debug
+    - quiet: false
+    - require:
+      - pkg: nfs-kernel-server
+    - shell: null
+    - stateful: false
+    - timeout: null
+    - umask: null
+    - unless: null
+    - use_vt: false
+    - user: null
+    - watch:
+      - file: server_exports
+    - run
+    - order: 10002
+    __sls__: nfs.server
+    __env__: base
+
